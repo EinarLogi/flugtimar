@@ -1,0 +1,68 @@
+	<!doctype html>
+	<html>
+		<head>
+			<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	   		 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+			<!-- Latest compiled and minified CSS -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+			<!-- Optional theme -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		</head>
+	<body>
+		<script type="text/javascript">
+
+			function refreshfunc(){
+					location.reload();
+				}
+			var time = 1000 * 60 * 5;
+			setInterval(refreshfunc,time);
+			
+			$(document).ready(function(){
+
+				$.ajax({
+					'url': 'http://apis.is/flight',
+					'type': 'GET',
+					'datatype': 'json',
+					'data': {'language': 'en', 'type': 'departures'},
+					'success': function(response){
+						console.log(response);
+						var trHTML = '';
+						for(var i = 0; i < response.results.length; i++){
+
+							if(!(response.results[i].realArrival.toLowerCase().includes("departed"))){
+
+								trHTML +='<tr><td>' + response.results[i].airline 
+								+ '</td><td>' + response.results[i].date 
+								+ '</td><td>' + response.results[i].flightNumber 
+								+ '</td><td>' + response.results[i].plannedArrival
+								+ '</td><td>' + response.results[i].realArrival
+								+ '</td><td>' + response.results[i].to
+								+ '</td></tr>';
+							}
+						}
+								 
+						$('#records_table').append(trHTML);
+					}
+				})
+			})
+
+		</script>
+	<div class="container">
+		<table id="records_table" class="table table-striped">
+			<tr>
+				<th id="Airline">Airline</th>
+				<th id="Date">Date</th>
+				<th id="FlightNumber">Flight Number</th>
+				<th id="PlannedArrival">Planned Departure</th>
+				<th id="RealArrival">Real Departure</th>
+				<th id="To">To</th>
+			</tr>
+		</table>
+	</div>
+
+	</body>
+</html>
